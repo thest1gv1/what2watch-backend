@@ -7,4 +7,5 @@
 #}
 
 
-GET http://localhost:3000/movies/popular
+
+GET https://what2watch-backend-production.up.railway.app/movies/trending
