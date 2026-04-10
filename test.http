@@ -1,0 +1,10 @@
+#POST http://localhost:3000/movies/recommend
+#
+#Content-Type: application/json
+#
+#{
+#  "prompt": "Подбери фильм с такими параметрами:\nКакое у вас настроение: Спокойное\nС кем смотрите: Один\nКакие жанры: Драма\nСколько времени: 90-120 минут\n\nПредложи ровно 5 фильмов.\nВерни ТОЛЬКО валидный JSON массив. Никакого текста до и после, никакого markdown.\nФормат: [{\"title\":\"Название на русском\",\"originalTitle\":\"Original Title\",\"year\":2021,\"genre\":\"Жанр\",\"description\":\"Краткое описание\"}]"
+#}
+
+
+GET http://localhost:3000/movies/popular
