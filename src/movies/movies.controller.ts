@@ -1,5 +1,5 @@
 import {Controller, Post, Body, Get, Res, Query} from '@nestjs/common';
-import type { Response } from 'express'
+import type {Response} from 'express'
 import {MoviesService} from './movies.service';
 
 @Controller('movies')
@@ -24,8 +24,8 @@ export class MoviesController {
   }
 
   @Get('poster')
-  async poster(@Query('path') path: string, @Res() res: Response) {
-    const imageResponse = await fetch(`https://image.tmdb.org/t/p/w300${path}`)
+  async poster(@Query('path') path: string, @Query('size') size: string = 'w300', @Res() res: Response) {
+    const imageResponse = await fetch(`https://image.tmdb.org/t/p/${size}${path}`)
     const buffer = await imageResponse.arrayBuffer()
     res.set('Content-Type', 'image/webp')
     res.send(Buffer.from(buffer))
