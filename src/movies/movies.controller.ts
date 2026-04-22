@@ -1,4 +1,4 @@
-import {Controller, Post, Body, Get, Res, Query} from '@nestjs/common';
+import {Controller, Post, Body, Get, Res, Query, Param} from '@nestjs/common';
 import type {Response} from 'express'
 import {MoviesService} from './movies.service';
 
@@ -30,4 +30,10 @@ export class MoviesController {
     res.set('Content-Type', 'image/webp')
     res.send(Buffer.from(buffer))
   }
+
+  @Get(':id')
+  async getById(@Param('id') id: string) {
+    return this.moviesService.getById(Number(id))
+  }
+
 }
