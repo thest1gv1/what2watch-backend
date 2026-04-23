@@ -34,15 +34,23 @@ export class MoviesService {
 
     return await Promise.all(
       movies.map(async (movie: any) => {
-        const { poster_path, tmdb_id } = await this.getMoviePoster(movie.originalTitle)
-        return { ...movie, poster_path, tmdb_id }
+        const {
+          poster_path,
+          tmdb_id,
+          backdrop_path
+        } = await this.getMoviePoster(movie.originalTitle)
+        return {...movie, poster_path, tmdb_id,backdrop_path}
       })
     )
 
 
   }
 
-  async getMoviePoster(title: string): Promise<{ poster_path: string | null, tmdb_id: number | null }> {
+  async getMoviePoster(title: string): Promise<{
+    poster_path: string | null,
+    tmdb_id: number | null,
+    backdrop_path: string | null
+  }> {
     const tmdbKey = this.configService.get<string>('TMDB_API_KEY')
 
     const response = await fetch(
@@ -54,7 +62,8 @@ export class MoviesService {
 
     return {
       poster_path: movie?.poster_path ?? null,
-      tmdb_id: movie?.id ?? null
+      tmdb_id: movie?.id ?? null,
+      backdrop_path: movie?.backdrop_path ?? null
     }
   }
 
@@ -82,11 +91,11 @@ export class MoviesService {
 
   }
 
-  async getById(id:number){
+  async getById(id: number) {
     const tmdbKey = this.configService.get('TMDB_API_KEY')
 
     const response = await fetch(
-      `https://api.themoviedb.org/3/movie/${id}?api_key=${tmdbKey}&language=ru-RU`
+      `https://api.themoviedb.org/3/movie/${id}?api_key=${tmdbKey}&language=ru-RU&append_to_response=credits,videos`
     )
 
     const data = await response.json()
