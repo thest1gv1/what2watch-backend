@@ -9,7 +9,7 @@ export class MoviesService {
 
   async recommend(prompt: string) {
     const geminiKey = this.configService.get<string>('GEMINI_KEY')
-
+    console.time('gemini')
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${geminiKey}`,
       {
@@ -20,6 +20,8 @@ export class MoviesService {
         })
       }
     )
+    console.timeEnd('gemini')
+
 
     if (!response.ok) {
       const errorData = await response.json()
@@ -31,17 +33,20 @@ export class MoviesService {
     const text = data.candidates[0].content.parts[0].text
     const cleaned = text.replace(/```json|```/g, '').trim()
     const movies = JSON.parse(cleaned)
-
-    return await Promise.all(
+    console.time('tmdb')
+    const result = await Promise.all(
       movies.map(async (movie: any) => {
         const {
           poster_path,
           tmdb_id,
           backdrop_path
         } = await this.getMoviePoster(movie.originalTitle)
-        return {...movie, poster_path, tmdb_id,backdrop_path}
+        return {...movie, poster_path, tmdb_id, backdrop_path}
       })
     )
+    console.timeEnd('tmdb')
+
+    return result
 
 
   }
